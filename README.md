@@ -42,3 +42,118 @@
 识别宠物的骨架，分析宠物动作，在固定姿态下对宠物进行抓拍
 
 
+## 环境配置
+
+### 1. 打开 Anaconda Prompt
+
+在 Windows 搜索栏中搜索并打开 **Anaconda Prompt**。
+
+### 2. 创建 Conda 环境
+
+```bash
+conda create -n <环境名> python=3.10
+```
+
+例如：
+
+```bash
+conda create -n pytorch-env python=3.10
+```
+
+> Python 版本需要根据 PyTorch 的兼容要求选择，通常优先使用 Python 3.10。
+
+### 3. 激活环境
+
+```bash
+conda activate <环境名>
+```
+
+例如：
+
+```bash
+conda activate pytorch-env
+```
+
+### 4. 查看显卡支持的 CUDA 版本
+
+在终端中运行：
+
+```bash
+nvidia-smi
+```
+
+重点查看以下信息：
+
+```text
+Driver Version: xxx.xx
+CUDA Version: 12.x / 13.x
+```
+
+其中：
+
+- `Driver Version` 表示当前安装的 NVIDIA 显卡驱动版本。
+- `CUDA Version` 表示当前驱动能够支持的最高 CUDA 版本，并不代表已经安装了对应版本的 CUDA Toolkit。
+- 安装 PyTorch 时，应选择 PyTorch 官方提供且不高于该版本的 CUDA 配置。
+
+### 5. 安装 GPU 版本的 PyTorch
+
+打开 [PyTorch 官方安装页面](https://pytorch.org/get-started/locally/)，根据实际情况选择：
+
+| 选项 | 建议配置 |
+|---|---|
+| PyTorch Build | Stable |
+| Your OS | 根据操作系统选择 |
+| Package | Pip |
+| Language | Python |
+| Compute Platform | 根据 `nvidia-smi` 的结果选择 |
+
+完成选择后，页面底部会生成安装命令。复制 **Run this Command** 中的命令，并在已经激活的 Conda 环境中运行。
+
+例如：
+
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+```
+
+> 上述命令仅为示例，请以 PyTorch 官方页面实时生成的命令为准。
+
+### 6. 验证 PyTorch 是否可以使用 GPU
+
+安装完成后运行：
+
+```bash
+python
+```
+
+然后在 Python 交互环境中依次执行：
+
+```python
+import torch
+
+print("PyTorch 版本：", torch.__version__)
+print("CUDA 是否可用：", torch.cuda.is_available())
+print("PyTorch CUDA 版本：", torch.version.cuda)
+
+if torch.cuda.is_available():
+    print("显卡型号：", torch.cuda.get_device_name(0))
+```
+
+如果输出：
+
+```text
+CUDA 是否可用： True
+```
+
+则说明 PyTorch GPU 环境配置成功。
+
+输入以下命令退出 Python：
+
+```python
+exit()
+```
+
+### 7.后续配置
+
+在创建的环境中安装各个模块的依赖、运行代码即可。
+
+
